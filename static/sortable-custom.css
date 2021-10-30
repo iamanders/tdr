@@ -1,0 +1,26 @@
+.sortable th {
+  cursor: pointer;
+}
+th.no-sort {
+  pointer-events: none;
+}
+
+.sortable th:hover::after {
+  color: inherit;
+  content: ' \025B8';
+}
+
+.sortable th::after {
+  color: transparent;
+  content: ' \025B8';
+}
+
+.sortable th.dir-d::after {
+  color: inherit;
+  content: ' \025BE';
+}
+
+.sortable th.dir-u::after {
+  color: inherit;
+  content: ' \025B4';
+}

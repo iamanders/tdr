@@ -1,0 +1,24 @@
+{{define "_time-table-row"}}
+
+    {{if not .StopsAt.Valid}}<tr class="running">{{else}}<tr class="flags-{{.Flags}}">{{end}}
+        <td>
+            <a href="/time/{{.Id}}/edit">{{.Project}}</a>
+        </td>
+        <td>{{.Code}}</td>
+        <td class="text-nowrap">
+            {{.StartsAt.Time.Format "15:04"}} -
+            {{if .StopsAt.Valid}}
+                {{.StopsAt.Time.Format "15:04"}}
+            {{end}}
+        </td>
+        <td data-sort="{{.TimeDuration.Seconds}}">
+            {{if .StopsAt.Valid}}
+                {{formatDuration .TimeDuration}}
+            {{else}}
+                ({{formatDuration .TimeDuration}})
+            {{end}}
+        </td>
+        <td>{{.Comment}}</td>
+    </tr>
+
+{{end}}

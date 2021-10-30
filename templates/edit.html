@@ -1,0 +1,78 @@
+{{template "base" .}}
+
+{{define "title"}}Edit time{{end}}
+
+{{define "content"}}
+    <div class="container py-5">
+        <h1 class="fs-2 fw-bold">Edit time</h1>
+
+        <form action="/time/{{.Data.time.Id}}/update" method="POST" class="mt-5 col-4">
+            {{ .Csrf }}
+
+            <div class="mb-3">
+                <label class="form-label">Project</label>
+                <input type="text" name="project" class="form-control" value="{{.Data.time.Project}}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Code</label>
+                <input type="text" name="code" class="form-control" value="{{.Data.time.Code}}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Comment</label>
+                <input type="text" name="comment" class="form-control" value="{{.Data.time.Comment}}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Flag</label>
+                <select class="form-select" name="flags">
+                    <option value="">-</option>
+                    <option value="1" {{if eq .Data.time.Flags 1}}selected{{end}}>Warning</option>
+                    <option value="2" {{if eq .Data.time.Flags 2}}selected{{end}}>Info</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Starts at</label>
+                <div class="input-group">
+                    {{if .Data.time.StartsAt.Valid}}
+                        <input type="date" class="form-control" name="starts_at_date" value="{{.Data.time.StartsAt.Time.Format "2006-01-02"}}">
+                        <input type="time" class="form-control" name="starts_at_time" value="{{.Data.time.StartsAt.Time.Format "15:04"}}">
+                    {{else}}
+                        <input type="date" class="form-control" name="starts_at_date">
+                        <input type="time" class="form-control" name="starts_at_time">
+                    {{end}}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Stops at</label>
+                <div class="input-group">
+                    {{if .Data.time.StopsAt.Valid}}
+                        <input type="date" class="form-control" name="stops_at_date" value="{{.Data.time.StopsAt.Time.Format "2006-01-02"}}">
+                        <input type="time" class="form-control" name="stops_at_time" value="{{.Data.time.StopsAt.Time.Format "15:04"}}">
+                    {{else}}
+                        <input type="date" class="form-control" name="stops_at_date">
+                        <input type="time" class="form-control" name="stops_at_time">
+                    {{end}}
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex align-items-center">
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                    </svg>
+                    Save changes
+                </button>
+                <a href="/day/{{.Data.time.StartsAt.Time.Format "2006-01-02"}}" class="ms-3 btn btn-link">Cancel</a>
+                <button class="ms-auto btn btn-danger" onclick="event.preventDefault(); if(confirm('Are you sure?')) { document.getElementById('time-delete-form').submit(); }">Delete</button>
+            </div>
+        </form>
+    </div>
+
+    <form action="/time/{{.Data.time.Id}}/delete" method="POST" id="time-delete-form">
+        {{.Csrf}}
+    </form>
+{{end}}
