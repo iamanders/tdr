@@ -149,7 +149,14 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td>
+                            {{$firstTime := index .Data.times 0}}
+                            {{$lastTime := index .Data.times (add (len .Data.times) -1)}}
+                            {{$firstTime.StartsAt.Time.Format "15:04"}} -
+                            {{if $lastTime.StopsAt.Valid}}
+                                {{$lastTime.StopsAt.Time.Format "15:04"}}
+                            {{end}}
+                        </td>
                         <td>
                             {{$td := timeDurationMultiple .Data.times true}}
                             {{formatDuration $td}}
