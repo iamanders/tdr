@@ -42,28 +42,38 @@
             <div class="container py-5">
                 <h2 class="fw-bold fs-5 mb-4">Per project</h2>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="w-25">Project</th>
-                            <th>Total time</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td>{{formatDuration .Data.summary_total_hours}}</td>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        {{ range $project, $hours := .Data.summary }}
-                            <tr>
-                                <td>{{$project}}</td>
-                                <td>{{formatDuration $hours}}</td>
-                            </tr>
-                        {{end}}
-                    </tbody>
-                </table>
+                <div class="row">
+
+                    <div class="col-8">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="w-25">Project</th>
+                                    <th>Total time</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>{{formatDuration .Data.summary_total_hours}}</td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {{ range $project, $hours := .Data.summary }}
+                                    <tr>
+                                        <td>{{$project}}</td>
+                                        <td>{{formatDuration $hours}}</td>
+                                    </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-4">
+                        <canvas id="chart-project-summary" width="100" height="100"></canvas>
+                    </div>
+                </div>
+
             </div>
         </div>
     {{end}}
@@ -124,4 +134,27 @@
 
     </div>
 
+    <script>
+        // Data for chart.js
+        const chartProjectSummaryData  = {
+            labels: [
+                {{range $project, $hours := .Data.summary}}'{{$project}}',{{end}}
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [
+                    {{ range $project, $hours := .Data.summary }}{{$hours.Hours}},{{end}}
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                hoverOffset: 2
+            }],
+        };
+    </script>
 {{end}}

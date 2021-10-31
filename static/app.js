@@ -20,3 +20,20 @@ if (dayToggleAdvancedFormButton) {
         });
     });
 }
+
+// Week page charts
+let chartProjectSummaryCanvas = document.querySelector('#chart-project-summary');
+if (chartProjectSummaryCanvas) {
+    new Chart(chartProjectSummaryCanvas, {
+        type: 'pie',
+        data: chartProjectSummaryData,
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    align: 'start',
+                },
+            },
+        }
+    });
+}
