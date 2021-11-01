@@ -55,4 +55,7 @@ func (app *application) SetupRoutes() {
 	app.Router.Post("/time/{timeId}/delete", app.PostTimeDelete)
 	app.Router.Post("/time/store", app.PostTimeStore)
 	app.Router.Post("/time/{timeId}/stop", app.PostTimeStop)
+
+	// Report
+	app.Router.Get("/report", app.GetReport)
 }
