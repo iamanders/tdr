@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"embed"
+	"flag"
 	"fmt"
 	"html/template"
 	"log"
@@ -41,8 +42,7 @@ func main() {
 
 	// Config and application variable
 	config := config{
-		Env: "dev",
-		// Env:     "production",
+		Env:     "production",
 		Port:    8765,
 		Address: "127.0.0.1",
 		CsrfKey: "00000000000000000000000000000000",
@@ -52,19 +52,12 @@ func main() {
 		Config: &config,
 	}
 
-	// Environment variables
-	if environment := os.Getenv("ENV"); len(environment) > 0 {
-		config.Env = environment
-	}
-	if port := os.Getenv("PORT"); len(port) > 0 {
-		config.Port, _ = strconv.Atoi(port)
-	}
-	if address := os.Getenv("HOST"); len(address) > 0 {
-		config.Address = address
-	}
-	if csrf := os.Getenv("CSRF"); len(csrf) > 0 {
-		config.CsrfKey = csrf
-	}
+	// Flags
+	flag.StringVar(&config.Env, "env", "production", "Environment, production or dev")
+	flag.IntVar(&config.Port, "port", 8765, "Port to bind server to")
+	flag.StringVar(&config.Address, "host", "127.0.0.1", "Host to bind server to")
+	flag.StringVar(&config.CsrfKey, "csrf", "00000000000000000000000000000000", "CSRF key, 32 chars")
+	flag.Parse()
 
 	// DB
 	homedir, err := os.UserHomeDir()
