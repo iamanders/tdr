@@ -38,7 +38,7 @@ func (app *application) GetReport(w http.ResponseWriter, r *http.Request) {
 		td.Data["search_result"] = models.GetTimesSearch(from, to, project, code)
 	}
 
-	if err := app.renderTemplates(w, r, &td, "report", "layout.app"); err != nil {
+	if err := app.renderTemplates(w, r, &td, "report", "layout.app", "partials/time-table-row"); err != nil {
 		log.Fatal(err)
 	}
 }

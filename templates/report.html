@@ -54,12 +54,50 @@
 
     <!-- Results container -->
     <div class="container py-5">
-        {{if .Data.is_search}}
-            <h2 class="fs-3 fw-bold">Results ({{len .Data.search_result}} times found)</h2>
-
-            {{.Data.search_result}}
-        {{else}}
+        {{if not .Data.is_search}}
             <!-- <h2 class="fs-3 fw-bold">Search</h2> -->
+
+        {{else if and (.Data.is_search) (not .Data.search_result) }}
+        <h2 class="fs-3 fw-bold">Found nothing ..</h2>
+        {{else}}
+            <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.search_result}} times</h2>
+
+            <!-- Table -->
+            <table class="table sortable">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Code</th>
+                        <th>Time</th>
+                        <th>Length</th>
+                        <th class="no-sort">Comment</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            {{$firstTime := index .Data.search_result 0}}
+                            {{$lastTime := index .Data.search_result (add (len .Data.search_result) -1)}}
+                            {{$firstTime.StartsAt.Time.Format "15:04"}} -
+                            {{if $lastTime.StopsAt.Valid}}
+                                {{$lastTime.StopsAt.Time.Format "15:04"}}
+                            {{end}}
+                        </td>
+                        <td>
+                            {{$td := timeDurationMultiple .Data.search_result true}}
+                            {{formatDuration $td}}
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {{range .Data.search_result}}
+                        {{template "_time-table-row" .}}
+                    {{end}}
+                </tbody>
+            </table>
         {{end}}
     </div>
 
