@@ -12,7 +12,7 @@ go build
 ## Dev:
 
 ```bash
-ENV=development go run .
+go run . -env dev
 ```
 or if you have Air installed
 
