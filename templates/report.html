@@ -63,7 +63,7 @@
             <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.search_result}} times</h2>
 
             <!-- Table -->
-            <table class="table sortable">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Project</th>
@@ -77,14 +77,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>
-                            {{$firstTime := index .Data.search_result 0}}
-                            {{$lastTime := index .Data.search_result (add (len .Data.search_result) -1)}}
-                            {{$firstTime.StartsAt.Time.Format "15:04"}} -
-                            {{if $lastTime.StopsAt.Valid}}
-                                {{$lastTime.StopsAt.Time.Format "15:04"}}
-                            {{end}}
-                        </td>
+                        <td></td>
                         <td>
                             {{$td := timeDurationMultiple .Data.search_result true}}
                             {{formatDuration $td}}
@@ -93,7 +86,14 @@
                     </tr>
                 </tfoot>
                 <tbody>
+                    {{$day := ""}}
                     {{range .Data.search_result}}
+                        {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
+                            <tr class="sub-heading">
+                                <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
+                            </tr>
+                            {{$day = .StartsAt.Time.Format "2006-01-02"}}
+                        {{end}}
                         {{template "_time-table-row" .}}
                     {{end}}
                 </tbody>
