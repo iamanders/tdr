@@ -1,0 +1,104 @@
+{{template "base" .}}
+
+{{define "title"}}Report{{end}}
+
+{{define "content"}}
+
+    <!-- Form conatiner -->
+    <div class="bg-white">
+        <div class="container py-5">
+            <h1 class="fs-2 fw-bold">Report</h1>
+
+            <form action="/report" method="GET">
+                <input type="hidden" name="search" value="1">
+
+                <div class="grid">
+                    <div class="row mt-4">
+                        <!-- Project -->
+                        <div class="col-3">
+                            <input type="text" name="project" class="form-control" placeholder="Project" value="{{.Data.search_project}}">
+                        </div>
+
+                        <!-- Code -->
+                        <div class="col-3">
+                            <input type="text" name="code" class="form-control" placeholder="Code" value="{{.Data.search_code}}">
+                        </div>
+
+                        <!-- From date -->
+                        <div class="col-2">
+                            <input type="date" name="from" class="form-control" placeholder="From date" value="{{.Data.search_date_from}}">
+                        </div>
+
+                        <!-- To date -->
+                        <div class="col-2">
+                            <input type="date" name="to" class="form-control" placeholder="To date" value="{{.Data.search_date_to}}">
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="col-2">
+                            <button class="btn btn-primary w-100">
+                                <span class="me-1">Search</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Results container -->
+    <div class="container py-5">
+        {{if not .Data.is_search}}
+            <!-- <h2 class="fs-3 fw-bold">Search</h2> -->
+
+        {{else if and (.Data.is_search) (not .Data.search_result) }}
+        <h2 class="fs-3 fw-bold">Found nothing ..</h2>
+        {{else}}
+            <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.search_result}} times</h2>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Code</th>
+                        <th>Time</th>
+                        <th>Length</th>
+                        <th class="no-sort">Comment</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            {{$td := timeDurationMultiple .Data.search_result true}}
+                            {{formatDuration $td}}
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {{$day := ""}}
+                    {{range .Data.search_result}}
+                        {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
+                            <tr class="sub-heading">
+                                <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
+                            </tr>
+                            {{$day = .StartsAt.Time.Format "2006-01-02"}}
+                        {{end}}
+                        {{template "_time-table-row" .}}
+                    {{end}}
+                </tbody>
+            </table>
+        {{end}}
+    </div>
+
+{{end}}
