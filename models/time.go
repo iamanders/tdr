@@ -60,6 +60,41 @@ func GetTimes(fromDate string, toDate string) []TimeModel {
 	return times
 }
 
+// Get times - Search
+func GetTimesSearch(fromDate string, toDate string, project string, code string) []TimeModel {
+	times := []TimeModel{}
+	var v []interface{}
+
+	// Build sql query
+	q := "SELECT id, project, code, comment, starts_at, stops_at, flags FROM times WHERE starts_at BETWEEN ? AND ?"
+	v = append(v, fromDate)
+	v = append(v, toDate)
+	if project != "" {
+		q += " AND project LIKE ?"
+		v = append(v, project)
+	}
+	if code != "" {
+		q += " AND code LIKE ?"
+		v = append(v, code)
+	}
+	q += " ORDER BY starts_at ASC"
+
+	rows, err := db.Query(q, v...)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		t := TimeModel{}
+		err = rows.Scan(&t.Id, &t.Project, &t.Code, &t.Comment, &t.StartsAt, &t.StopsAt, &t.Flags)
+		if err != nil {
+			log.Fatal(err)
+		}
+		times = append(times, t)
+	}
+
+	return times
+}
+
 // Get any current not completed tasks
 func GetCurrentTime() (*TimeModel, error) {
 	t := TimeModel{}
