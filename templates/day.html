@@ -12,7 +12,9 @@
                 <div>
                     <p class="fw-bold mb-3 text-secondary">Current task:</p>
                     <h2 class="fs-5 fw-bold">
-                        {{.Data.current.Project}}
+                        <a href="/time/{{.Data.current.Id}}/edit" class="text-black text-decoration-none">
+                            {{.Data.current.Project}}
+                        </a>
                         {{if .Data.current.Code}}
                             <span class="text-secondary">({{.Data.current.Code}})</span>
                         {{end}}
