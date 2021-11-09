@@ -22,9 +22,9 @@ func (app *application) GetReport(w http.ResponseWriter, r *http.Request) {
 		td.Data["search_date_from"] = time.Now().AddDate(0, 0, -6).Format("2006-01-02")
 	}
 	if r.URL.Query().Get("to") != "" {
-		td.Data["search_date_to"] = time.Now().Format("2006-01-02")
+		td.Data["search_date_to"] = r.URL.Query().Get("to")
 	} else {
-		td.Data["search_date_to"] = "2020-11-10"
+		td.Data["search_date_to"] = time.Now().Format("2006-01-02")
 	}
 
 	// Search?
