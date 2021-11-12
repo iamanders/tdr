@@ -1,13 +1,18 @@
 {{template "base" .}}
 
-{{define "title"}}{{.Data.day_date.Format "02 Jan, 2006"}}{{end}}
+{{define "title"}}
+    {{if .Data.current}}
+        ({{.Data.current.Project}} {{.Data.current.StartsAt.Time.Format "15:04"}})
+    {{end}}
+    {{.Data.day_date.Format "02 Jan, 2006"}}
+{{end}}
 
 {{define "content"}}
 
     <!-- Start/stop forms -->
     {{if .Data.current}}
         <!-- Stop task -->
-        <div class="bg-light-gray">
+        <div class="bg-yellow">
             <div class="container py-5">
                 <div class="d-flex justify-content-between">
                     <div>
