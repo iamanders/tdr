@@ -3,9 +3,13 @@
 {{define "title"}}Edit time{{end}}
 
 {{define "content"}}
-    <div class="container py-5">
-        <h1 class="fs-2 fw-bold">Edit time</h1>
+    <div class="bg-light-gray">
+        <div class="container py-5">
+            <h1 class="fs-2 fw-bold">Edit time</h1>
+        </div>
+    </div>
 
+    <div class="container pt-3 pb-5">
         <form action="/time/{{.Data.time.Id}}/update" method="POST" class="mt-5 col-4">
             {{ .Csrf }}
 

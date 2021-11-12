@@ -1,5 +1,6 @@
+/* Basics */
 body, html {
-    background-color: #f3f2eb;
+    background-color: white;
 }
 
 button, input[type=submit] {
@@ -7,27 +8,54 @@ button, input[type=submit] {
 }
 
 a {
+    color: #306a81;
     transition: color .25s;
 }
-a:hover {}
+a:hover {
+    color: #0f465c;
+}
 
-.bg-green {
-    background-color: #406d54;
+
+/* Override default bootstrap buttons */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus {
+    color: #fff;
+    background-color: #c1708e;
+    border-color: #c1708e;
+}
+.btn-primary:active,
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(182, 116, 141, 0.5) !important;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(182, 116, 141, 0.5) !important;
+    border-color: rgba(182, 116, 141, 0.8);
+}
+
+/* Custom colors */
+.bg-light-gray {
+    background-color: #e4e9ea;
+}
+.bg-nav {
+    background-color: #487586;
 }
 .bg-yellow {
-    background-color: #eada9b;
+    background-color: #f2eacb;
 }
 
+/* Header */
 .header a.header-link {
     color: white;
 }
 .header a.header-link:hover {
-    color: #77e0a5;
+    color: #99b5bf;
 }
 
+/* Table */
 table.table {
     border-radius: 6px;
-    box-shadow: 0 0 0 1px #406d54; /* this draws the table border  */
+    box-shadow: 0 0 0 1px #487586; /* this draws the table border  */
 }
 table.table td {
     background-color: white;
@@ -37,7 +65,7 @@ table.table thead tr {
     border: 0;
 }
 table.table thead th {
-    background-color: #406d54;
+    background-color: #487586;
     border: 0;
     color: white;
 }
@@ -49,10 +77,10 @@ table.table tfoot td {
 }
 
 table.table tbody tr {
-    border-bottom: 1px solid #406d54;
+    border-bottom: 1px solid #487586;
 }
 table.table tbody tr td {
-    border-right: 1px solid #406d54;
+    border-right: 1px solid #487586;
 }
 table.table tbody tr td:last-child {
     border-right: 0;
@@ -62,7 +90,7 @@ table.table tbody tr:nth-child(odd) td {
 }
 
 /* Flags and running */
-table.table tbody tr.sub-heading td { background-color: #8bae9a; }
+table.table tbody tr.sub-heading td { background-color: #a9bfc8; }
 table.table tbody tr.running td { background-color: #f2eacb; }
 table.table tbody tr.flags-1 td { background-color: #ecd6cd; }
 table.table tbody tr.flags-2 td { background-color: #d6e1e6; }

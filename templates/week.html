@@ -5,32 +5,34 @@
 {{define "content"}}
 
     <!-- Navigate -->
-    <div class="container py-5">
-        <div class="grid mt-3 mb-4">
-            <div class="row">
-                <div class="col-3 d-flex align-items-center">
-                    <a href="/week/{{.Data.previous_year}}-{{.Data.previous_week}}" class="btn btn-primary pe-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                        </svg>
-                        Previous week
-                    </a>
-                </div>
-                <div class="col-6 d-flex align-items-center justify-content-center text-center">
-                    <div>
-                        <h1 class="mb-0 fw-bold fs-5">
-                            Week {{.Data.week}} - {{.Data.year}}
-                        </h1>
-                        <p class="text-secondary my-0 mt-1">{{.Data.start_date.Format "02 Jan"}} - {{.Data.stop_date.Format "02 Jan"}}</p>
+    <div class="bg-light-gray">
+        <div class="container py-5">
+            <div class="grid mt-3 mb-4">
+                <div class="row">
+                    <div class="col-3 d-flex align-items-center">
+                        <a href="/week/{{.Data.previous_year}}-{{.Data.previous_week}}" class="btn btn-primary pe-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                            Previous week
+                        </a>
                     </div>
-                </div>
-                <div class="col-3 d-flex align-items-center justify-content-end">
-                    <a href="/week/{{.Data.next_year}}-{{.Data.next_week}}" class="btn btn-primary ps-3">
-                        Next week
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                        </svg>
-                    </a>
+                    <div class="col-6 d-flex align-items-center justify-content-center text-center">
+                        <div>
+                            <h1 class="mb-0 fw-bold fs-5">
+                                Week {{.Data.week}} - {{.Data.year}}
+                            </h1>
+                            <p class="text-secondary my-0 mt-1">{{.Data.start_date.Format "02 Jan"}} - {{.Data.stop_date.Format "02 Jan"}}</p>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex align-items-center justify-content-end">
+                        <a href="/week/{{.Data.next_year}}-{{.Data.next_week}}" class="btn btn-primary ps-3">
+                            Next week
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,59 +81,61 @@
     {{end}}
 
     <!-- Times complete week -->
-    <div class="container py-5">
-        {{if not .Data.times}}
-            <!-- Empty state -->
-            <p class="bg-light rounded-3 p-3 px-4">No times yet ..</p>
-        {{else}}
-            <h2 class="fw-bold fs-5 mb-4">Times per day</h2>
-            <!-- Table -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Project</th>
-                        <th>Code</th>
-                        <th>Time</th>
-                        <th>Length</th>
-                        <th class="no-sort">Comment</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            {{$td := timeDurationMultiple .Data.times true}}
-                            {{formatDuration $td}}
-                        </td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    {{$day := ""}}
-                    {{range .Data.times}}
-                        {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
-                            <tr class="sub-heading">
-                                <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
-                            </tr>
-                            {{$day = .StartsAt.Time.Format "2006-01-02"}}
+    <div class="bg-light-gray">
+        <div class="container py-5">
+            {{if not .Data.times}}
+                <!-- Empty state -->
+                <p class="bg-light rounded-3 p-3 px-4">No times yet ..</p>
+            {{else}}
+                <h2 class="fw-bold fs-5 mb-4">Times per day</h2>
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Code</th>
+                            <th>Time</th>
+                            <th>Length</th>
+                            <th class="no-sort">Comment</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                {{$td := timeDurationMultiple .Data.times true}}
+                                {{formatDuration $td}}
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {{$day := ""}}
+                        {{range .Data.times}}
+                            {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
+                                <tr class="sub-heading">
+                                    <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
+                                </tr>
+                                {{$day = .StartsAt.Time.Format "2006-01-02"}}
+                            {{end}}
+                            {{template "_time-table-row" .}}
                         {{end}}
-                        {{template "_time-table-row" .}}
-                    {{end}}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-        {{end}}
+            {{end}}
 
-        <!-- Go to current week -->
-        <a href="/week" class="btn btn-sm mt-2 px-3 btn">
-            Go to current week
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-            </svg>
-        </a>
+            <!-- Go to current week -->
+            <a href="/week" class="btn btn-sm mt-2 px-3 btn">
+                Go to current week
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                </svg>
+            </a>
 
+        </div>
     </div>
 
     <script>

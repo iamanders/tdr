@@ -1,13 +1,18 @@
 {{template "base" .}}
 
-{{define "title"}}{{.Data.day_date.Format "02 Jan, 2006"}}{{end}}
+{{define "title"}}
+    {{if .Data.current}}
+        ({{.Data.current.Project}} {{.Data.current.StartsAt.Time.Format "15:04"}})
+    {{end}}
+    {{.Data.day_date.Format "02 Jan, 2006"}}
+{{end}}
 
 {{define "content"}}
 
     <!-- Start/stop forms -->
     {{if .Data.current}}
         <!-- Stop task -->
-        <div class="bg-white">
+        <div class="bg-yellow">
             <div class="container py-5">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -40,7 +45,7 @@
         </div>
     {{else}}
         <!-- Start task -->
-        <div class="bg-white">
+        <div class="bg-light-gray">
             <div class="container py-5">
                 <form action="/time/store" method="POST">
                     {{ .Csrf }}
@@ -135,7 +140,7 @@
         <!-- Table -->
         {{if not .Data.times}}
             <!-- Empty state -->
-            <p class="bg-light rounded-3 p-3 px-4">No times yet ..</p>
+            <p class="bg-light-gray rounded-3 p-3 px-4">No times yet ..</p>
         {{else}}
             <!-- Table -->
             <table class="table sortable">
