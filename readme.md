@@ -19,3 +19,9 @@ or if you have Air installed
 ```bash
 air
 ```
+
+## Tests:
+
+```bash
+go test
+```
