@@ -33,6 +33,14 @@ a:hover {
     border-color: rgba(182, 116, 141, 0.8);
 }
 
+/* Other misc bootstrap overrides and extensions */
+.cursor-pointer {
+    cursor: pointer;
+}
+.fs-7 {
+    font-size: .8rem;
+}
+
 /* Custom colors */
 .bg-light-gray {
     background-color: #e4e9ea;
@@ -113,11 +121,14 @@ table.table tfoot td:last-child { border-bottom-right-radius: 6px; }
 }
 
 /* Day page specifics */
+.day-no-gap-label {
+    font-size: .8rem;
+}
 .day-toggle-advanced-form-button {
     text-decoration: none;
-    font-size: .75rem;
+    font-size: .8rem;
 }
 .day-toggle-insert-current-time {
     text-decoration: none;
-    font-size: .75rem;
+    font-size: .8rem;
 }

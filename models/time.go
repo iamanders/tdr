@@ -117,6 +117,18 @@ func GetTimeById(id int64) (*TimeModel, error) {
 	return &t, nil
 }
 
+// Get the latest stopped time in a day
+// day should be in format of "YYYY-mm-dd"
+func GetLastTimeOfDay(day string) (*TimeModel, error) {
+	t := TimeModel{}
+	row := db.QueryRow(fmt.Sprintf("SELECT id, project, code, comment, starts_at, stops_at, flags FROM times WHERE starts_at BETWEEN '%s 00:00:00' and '%s 23:59:59' AND stops_at IS NOT NULL ORDER BY stops_at DESC LIMIT 1", day, day))
+	err := row.Scan(&t.Id, &t.Project, &t.Code, &t.Comment, &t.StartsAt, &t.StopsAt, &t.Flags)
+	if err == sql.ErrNoRows {
+		return nil, err
+	}
+	return &t, nil
+}
+
 // Insert a time to database
 func InsertTimeModel(t *TimeModel) *TimeModel {
 	stmt, err := db.Prepare("INSERT INTO times (project, code, comment, starts_at, stops_at, flags) VALUES (?, ?, ?, ?, ?, ?)")

@@ -1,3 +1,12 @@
+// Toggle non gap on day page
+let dayNoGapCheckbox = document.querySelector('.day-no-gap-label input[type="checkbox"]');
+if (dayNoGapCheckbox) {
+    dayNoGapCheckbox.addEventListener('change', function() {
+        let start = document.querySelector('.day-toggle-advanced-form div:first-child');
+        start.style.display = start.style.display == 'none' ? 'block' : 'none';
+    })
+}
+
 // Toggle advanced form on day page
 let dayToggleAdvancedFormButton = document.querySelector('.day-toggle-advanced-form-button');
 if (dayToggleAdvancedFormButton) {

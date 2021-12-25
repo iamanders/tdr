@@ -63,6 +63,14 @@ func (app *application) PostTimeStore(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Optional - No gap?
+	if r.FormValue("no_gap") == "1" {
+		lastTime, err := models.GetLastTimeOfDay(time.Now().Format("2006-01-02"))
+		if err == nil && lastTime.Id > 0 {
+			t.StartsAt = lastTime.StopsAt
+		}
+	}
+
 	// TODO: Validate
 	// TEMP: Before validation is done
 	defaultEmptyString(&t.Project, "Default project")
