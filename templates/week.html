@@ -57,7 +57,10 @@
                             <tfoot>
                                 <tr>
                                     <td></td>
-                                    <td>{{formatDuration .Data.summary_total_hours}}</td>
+                                    <td>
+                                        {{$td := timeDurationMultiple .Data.times true}}
+                                        {{formatDuration $td}}
+                                    </td>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -68,7 +71,13 @@
                                     </tr>
                                     {{range $code, $duration := $row.Codes}}
                                         <tr class="sub-row">
-                                            <td>{{$code}}</td>
+                                            <td>
+                                                {{if ne $code "" }}
+                                                    {{$code}}
+                                                {{else}}
+                                                    -
+                                                {{end}}
+                                            </td>
                                             <td>{{formatDuration $duration}}</td>
                                         </tr>
                                     {{end}}

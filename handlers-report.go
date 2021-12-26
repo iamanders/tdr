@@ -30,12 +30,37 @@ func (app *application) GetReport(w http.ResponseWriter, r *http.Request) {
 	// Search?
 	td.Data["is_search"] = false
 	if r.URL.Query().Get("search") == "1" {
+		// Set vars
 		td.Data["is_search"] = true
 		from := td.Data["search_date_from"].(string) + " 00:00:00"
 		to := td.Data["search_date_to"].(string) + " 23:59:59"
 		project := strings.Replace(td.Data["search_project"].(string), "*", "%", -1)
 		code := strings.Replace(td.Data["search_code"].(string), "*", "%", -1)
 		td.Data["search_result"] = models.GetTimesSearch(from, to, project, code)
+
+		//  Summary per project and code
+		summary := make([]summaryData, 0)
+		// Make sure all projects exists in summary array
+		for _, t := range td.Data["search_result"].([]models.TimeModel) {
+			rowIndex := summaryFindProject(&summary, t.Project)
+			if rowIndex < 0 {
+				row := &summaryData{Project: t.Project, Duration: 0, Codes: make(map[string]time.Duration)}
+				summary = append(summary, *row)
+			}
+		}
+		// Append summary data
+		for _, t := range td.Data["search_result"].([]models.TimeModel) {
+			rowIndex := summaryFindProject(&summary, t.Project)
+			summary[rowIndex].Duration += t.TimeDuration()
+
+			// Get or create code
+			if _, ok := summary[rowIndex].Codes[t.Code]; !ok {
+				// Init the code row
+				summary[rowIndex].Codes[t.Code] = 0
+			}
+			summary[rowIndex].Codes[t.Code] += t.TimeDuration()
+		}
+		td.Data["summary"] = summary
 	}
 
 	if err := app.renderTemplates(w, r, &td, "report", "layout.app", "partials/time-table-row"); err != nil {

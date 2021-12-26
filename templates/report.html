@@ -52,53 +52,138 @@
         </div>
     </div>
 
+    <!-- Summarize per project -->
+    {{if .Data.search_result}}
+        <div class="bg-white">
+            <div class="container py-5">
+                <h2 class="fw-bold fs-5 mb-4">Per project</h2>
+
+                <div class="row">
+
+                    <div class="col-8">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Total time</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        {{$td := timeDurationMultiple .Data.search_result true}}
+                                        {{formatDuration $td}}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {{range $row := .Data.summary}}
+                                    <tr class="sub-heading">
+                                        <td>{{$row.Project}}</td>
+                                        <td>{{formatDuration $row.Duration}}</td>
+                                    </tr>
+                                    {{range $code, $duration := $row.Codes}}
+                                        <tr class="sub-row">
+                                            <td>
+                                                {{if ne $code "" }}
+                                                    {{$code}}
+                                                {{else}}
+                                                    -
+                                                {{end}}
+                                            </td>
+                                            <td>{{formatDuration $duration}}</td>
+                                        </tr>
+                                    {{end}}
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-4">
+                        <canvas id="chart-project-summary" width="100" height="100"></canvas>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {{end}}
+
     <!-- Results container -->
-    <div class="container py-5">
-        {{if not .Data.is_search}}
-            <!-- <h2 class="fs-3 fw-bold">Search</h2> -->
+    <div class="bg-light-gray">
+        <div class="container py-5">
+            {{if not .Data.is_search}}
+                <!-- <h2 class="fs-3 fw-bold">Search</h2> -->
 
-        {{else if and (.Data.is_search) (not .Data.search_result) }}
-        <h2 class="fs-3 fw-bold">Found nothing ..</h2>
-        {{else}}
-            <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.search_result}} times</h2>
+            {{else if and (.Data.is_search) (not .Data.search_result) }}
+            <h2 class="fs-3 fw-bold">Found nothing ..</h2>
+            {{else}}
+                <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.search_result}} times</h2>
 
-            <!-- Table -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Project</th>
-                        <th>Code</th>
-                        <th>Time</th>
-                        <th>Length</th>
-                        <th class="no-sort">Comment</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            {{$td := timeDurationMultiple .Data.search_result true}}
-                            {{formatDuration $td}}
-                        </td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    {{$day := ""}}
-                    {{range .Data.search_result}}
-                        {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
-                            <tr class="sub-heading">
-                                <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
-                            </tr>
-                            {{$day = .StartsAt.Time.Format "2006-01-02"}}
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Code</th>
+                            <th>Time</th>
+                            <th>Length</th>
+                            <th class="no-sort">Comment</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                {{$td := timeDurationMultiple .Data.search_result true}}
+                                {{formatDuration $td}}
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {{$day := ""}}
+                        {{range .Data.search_result}}
+                            {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
+                                <tr class="sub-heading">
+                                    <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
+                                </tr>
+                                {{$day = .StartsAt.Time.Format "2006-01-02"}}
+                            {{end}}
+                            {{template "_time-table-row" .}}
                         {{end}}
-                        {{template "_time-table-row" .}}
-                    {{end}}
-                </tbody>
-            </table>
-        {{end}}
+                    </tbody>
+                </table>
+            {{end}}
+        </div>
     </div>
+
+    {{if .Data.search_result}}
+        <script>
+            // Data for chart.js
+            const chartProjectSummaryData  = {
+                labels: [
+                    {{range $row := .Data.summary}}'{{$row.Project}}',{{end}}
+                ],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [
+                        {{ range $row := .Data.summary }}{{$row.Duration.Hours}},{{end}}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    hoverOffset: 2
+                }],
+            };
+        </script>
+    {{end}}
 
 {{end}}
