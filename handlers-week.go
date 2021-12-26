@@ -11,6 +11,25 @@ import (
 	"github.com/snabb/isoweek"
 )
 
+// summaryData represents project and times
+// Used on week page
+type summaryData struct {
+	Project  string
+	Duration time.Duration
+	Codes    map[string]time.Duration
+}
+
+// summaryFindProject finds a project in a []summaryData array
+// Returns index of project. Returns -1 if not found.
+func summaryFindProject(rows *[]summaryData, project string) int {
+	for i, row := range *rows {
+		if row.Project == project {
+			return i
+		}
+	}
+	return -1
+}
+
 // GET week index
 func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 	td := templateData{Data: make(map[string]interface{})}
@@ -39,14 +58,31 @@ func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 	// Times
 	td.Data["times"] = models.GetTimes(startDate.Format("2006-01-02 15:04:05"), stopDate.Format("2006-01-02 15:04:05"))
 
-	// Summary per project
-	summaryMap := make(map[string]time.Duration)
+	//  Summary per project and code
+	summary := make([]summaryData, 0)
 	var summaryTotal time.Duration
+	// Make sure all projects exists in summary array
 	for _, t := range td.Data["times"].([]models.TimeModel) {
-		summaryMap[t.Project] += t.TimeDuration()
-		summaryTotal += t.TimeDuration()
+		rowIndex := summaryFindProject(&summary, t.Project)
+		if rowIndex < 0 {
+			row := &summaryData{Project: t.Project, Duration: 0, Codes: make(map[string]time.Duration)}
+			summary = append(summary, *row)
+		}
 	}
-	td.Data["summary"] = summaryMap
+	// Append summary data
+	for _, t := range td.Data["times"].([]models.TimeModel) {
+		rowIndex := summaryFindProject(&summary, t.Project)
+		summary[rowIndex].Duration += t.TimeDuration()
+		summaryTotal += t.TimeDuration()
+
+		// Get or create code
+		if _, ok := summary[rowIndex].Codes[t.Code]; !ok {
+			// Init the code row
+			summary[rowIndex].Codes[t.Code] = 0
+		}
+		summary[rowIndex].Codes[t.Code] += t.TimeDuration()
+	}
+	td.Data["summary"] = summary
 	td.Data["summary_total_hours"] = summaryTotal
 
 	// Render
