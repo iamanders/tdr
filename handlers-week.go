@@ -60,7 +60,6 @@ func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 
 	//  Summary per project and code
 	summary := make([]summaryData, 0)
-	var summaryTotal time.Duration
 	// Make sure all projects exists in summary array
 	for _, t := range td.Data["times"].([]models.TimeModel) {
 		rowIndex := summaryFindProject(&summary, t.Project)
@@ -73,7 +72,6 @@ func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 	for _, t := range td.Data["times"].([]models.TimeModel) {
 		rowIndex := summaryFindProject(&summary, t.Project)
 		summary[rowIndex].Duration += t.TimeDuration()
-		summaryTotal += t.TimeDuration()
 
 		// Get or create code
 		if _, ok := summary[rowIndex].Codes[t.Code]; !ok {
@@ -83,7 +81,6 @@ func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 		summary[rowIndex].Codes[t.Code] += t.TimeDuration()
 	}
 	td.Data["summary"] = summary
-	td.Data["summary_total_hours"] = summaryTotal
 
 	// Render
 	if err := app.renderTemplates(w, r, &td, "week", "layout.app", "partials/time-table-row"); err != nil {
