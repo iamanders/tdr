@@ -61,11 +61,17 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                {{ range $project, $hours := .Data.summary }}
-                                    <tr>
-                                        <td>{{$project}}</td>
-                                        <td>{{formatDuration $hours}}</td>
+                                {{range $row := .Data.summary}}
+                                    <tr class="sub-heading">
+                                        <td>{{$row.Project}}</td>
+                                        <td>{{formatDuration $row.Duration}}</td>
                                     </tr>
+                                    {{range $code, $duration := $row.Codes}}
+                                        <tr class="sub-row">
+                                            <td>{{$code}}</td>
+                                            <td>{{formatDuration $duration}}</td>
+                                        </tr>
+                                    {{end}}
                                 {{end}}
                             </tbody>
                         </table>
@@ -74,8 +80,8 @@
                     <div class="col-4">
                         <canvas id="chart-project-summary" width="100" height="100"></canvas>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     {{end}}
@@ -142,12 +148,12 @@
         // Data for chart.js
         const chartProjectSummaryData  = {
             labels: [
-                {{range $project, $hours := .Data.summary}}'{{$project}}',{{end}}
+                {{range $row := .Data.summary}}'{{$row.Project}}',{{end}}
             ],
             datasets: [{
                 label: 'My First Dataset',
                 data: [
-                    {{ range $project, $hours := .Data.summary }}{{$hours.Hours}},{{end}}
+                    {{ range $row := .Data.summary }}{{$row.Duration.Hours}},{{end}}
                 ],
                 backgroundColor: [
                     'rgba(255, 99, 132, 1)',
@@ -161,4 +167,5 @@
             }],
         };
     </script>
+
 {{end}}

@@ -99,6 +99,7 @@ table.table tbody tr:nth-child(odd) td {
 
 /* Flags and running */
 table.table tbody tr.sub-heading td { background-color: #a9bfc8; }
+table.table tbody tr.sub-row td { color: #777; }
 table.table tbody tr.running td { background-color: #f2eacb; }
 table.table tbody tr.flags-1 td { background-color: #ecd6cd; }
 table.table tbody tr.flags-2 td { background-color: #d6e1e6; }
