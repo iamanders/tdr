@@ -45,8 +45,6 @@ func (app *application) renderTemplates(w http.ResponseWriter, r *http.Request, 
 			ParseFiles(templates...)
 	}
 	if err != nil {
-		// TODO
-		fmt.Println(err)
 		return err
 	}
 
@@ -58,8 +56,6 @@ func (app *application) renderTemplates(w http.ResponseWriter, r *http.Request, 
 
 	err = t.Execute(w, td)
 	if err != nil {
-		log.Fatal(err)
-		// app.errorLog.Println(err)
 		return err
 	}
 
@@ -70,4 +66,21 @@ func (app *application) renderTemplates(w http.ResponseWriter, r *http.Request, 
 func (app *application) addDefaultTemplateData(td *templateData, r *http.Request) *templateData {
 	td.Csrf = csrf.TemplateField(r)
 	return td
+}
+
+// 404 render
+func (app *application) render404(w http.ResponseWriter, r *http.Request, e string) {
+	w.WriteHeader(http.StatusNotFound)
+	if err := app.renderTemplates(w, r, nil, "404", "layout.app"); err != nil {
+		return
+	}
+}
+
+// 500 render
+func (app *application) render500(w http.ResponseWriter, r *http.Request, e string) {
+	log.Println(e)
+	w.WriteHeader(http.StatusInternalServerError)
+	if err := app.renderTemplates(w, r, nil, "500", "layout.app"); err != nil {
+		return
+	}
 }
