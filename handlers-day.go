@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -35,6 +34,7 @@ func (app *application) GetDay(w http.ResponseWriter, r *http.Request) {
 	td.Data["day_link_previous"] = "/day/" + currentDay.AddDate(0, 0, 1).Format("2006-01-02")
 
 	if err := app.renderTemplates(w, r, &td, "day", "layout.app", "partials/time-table-row"); err != nil {
-		log.Fatal(err)
+		app.render500(w, r, err.Error())
+		return
 	}
 }

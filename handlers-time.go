@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -18,21 +17,21 @@ func (app *application) GetTimeEdit(w http.ResponseWriter, r *http.Request) {
 	timeId := chi.URLParam(r, "timeId")
 	timeIdInt, err := strconv.Atoi(timeId)
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 
 	t, err := models.GetTimeById(int64(timeIdInt))
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 
 	td := templateData{Data: make(map[string]interface{})}
 	td.Data["time"] = t
 	if err := app.renderTemplates(w, r, &td, "edit", "layout.app"); err != nil {
-		log.Fatal(err)
-		// app.errorLog.Println(err)
+		app.render500(w, r, err.Error())
+		return
 	}
 }
 
@@ -86,13 +85,13 @@ func (app *application) PostTimeStop(w http.ResponseWriter, r *http.Request) {
 	timeId := chi.URLParam(r, "timeId")
 	timeIdInt, err := strconv.Atoi(timeId)
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 	t, err := models.GetTimeById(int64(timeIdInt))
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 
 	// Update
@@ -108,13 +107,13 @@ func (app *application) PostTimeUpdate(w http.ResponseWriter, r *http.Request) {
 	timeId := chi.URLParam(r, "timeId")
 	timeIdInt, err := strconv.Atoi(timeId)
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 	t, err := models.GetTimeById(int64(timeIdInt))
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 
 	// Get data from form
@@ -159,13 +158,13 @@ func (app *application) PostTimeDelete(w http.ResponseWriter, r *http.Request) {
 	timeId := chi.URLParam(r, "timeId")
 	timeIdInt, err := strconv.Atoi(timeId)
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 	t, err := models.GetTimeById(int64(timeIdInt))
 	if err != nil {
-		log.Fatal(err)
-		// TODO: return something
+		app.render404(w, r, err.Error())
+		return
 	}
 
 	// Delete

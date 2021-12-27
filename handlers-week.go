@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -12,7 +11,7 @@ import (
 )
 
 // summaryData represents project and times
-// Used on week page
+// Used on week and report pages
 type summaryData struct {
 	Project  string
 	Duration time.Duration
@@ -84,7 +83,7 @@ func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 
 	// Render
 	if err := app.renderTemplates(w, r, &td, "week", "layout.app", "partials/time-table-row"); err != nil {
-		log.Fatal(err)
-		// app.errorLog.Println(err)
+		app.render500(w, r, err.Error())
+		return
 	}
 }

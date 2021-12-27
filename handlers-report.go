@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -64,6 +63,7 @@ func (app *application) GetReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := app.renderTemplates(w, r, &td, "report", "layout.app", "partials/time-table-row"); err != nil {
-		log.Fatal(err)
+		app.render500(w, r, err.Error())
+		return
 	}
 }
