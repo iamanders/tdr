@@ -14,6 +14,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/iamanders/tdr/models"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/webview/webview"
 )
 
 //go:embed templates
@@ -39,7 +40,6 @@ type application struct {
 }
 
 func main() {
-
 	// Config and application variable
 	config := config{
 		Env:     "production",
@@ -92,7 +92,21 @@ func main() {
 	app.Router = chi.NewRouter()
 	app.SetupRoutes()
 
-	// Start server
-	log.Printf("Starting server at http://%s:%d", config.Address, config.Port)
-	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(config.Port), app.Router))
+	go func() {
+		log.Printf("Starting server at http://%s:%d", config.Address, config.Port)
+		log.Fatal(http.ListenAndServe(":"+strconv.Itoa(config.Port), app.Router))
+	}()
+
+	startOpenWindow(&config)
+}
+
+func startOpenWindow(config *config) {
+	debug := true
+	w := webview.New(debug)
+	defer w.Destroy()
+	w.SetTitle("TDR")
+	w.SetSize(2000, 1200, webview.HintNone)
+	w.Navigate(fmt.Sprintf("http://%s:%d", config.Address, config.Port))
+	// w.Navigate("http://127.0.0.1:8765")
+	w.Run()
 }

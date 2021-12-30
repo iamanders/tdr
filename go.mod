@@ -12,4 +12,5 @@ require (
 require (
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/webview/webview v0.0.0-20210330151455-f540d88dde4e // indirect
 )
