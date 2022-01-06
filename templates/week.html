@@ -145,6 +145,23 @@
         </div>
     </div>
 
+    <!-- Notes per day in week -->
+    <div class="bg-white">
+        <div class="container py-5">
+            <h2 class="fw-bold fs-5 mb-4">Notes per day</h2>
+
+            {{if not .Data.notes}}
+                <!-- Empty state -->
+                <p class="bg-light rounded-3 p-3 px-4">No notes yet ..</p>
+            {{else}}
+                {{range .Data.notes}}
+                    <h3 class="fw-bold fs-6 mb-3">{{.HappenAt.Time.Weekday}}, {{.HappenAt.Time.Format "02 Jan, 2006"}}</h3>
+                    <div class="notes-placeholder-control mb-4 fs-6"><pre>{{.Note}}</pre></div>
+                {{end}}
+            {{end}}
+        </div>
+    </div>
+
     <script>
         // Data for chart.js
         const chartProjectSummaryData  = {

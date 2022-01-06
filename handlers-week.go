@@ -54,8 +54,9 @@ func (app *application) GetWeek(w http.ResponseWriter, r *http.Request) {
 	td.Data["next_year"], td.Data["next_week"] = startDate.AddDate(0, 0, 7).ISOWeek()
 	td.Data["previous_year"], td.Data["previous_week"] = startDate.AddDate(0, 0, -7).ISOWeek()
 
-	// Times
+	// Times and notes
 	td.Data["times"] = models.GetTimes(startDate.Format("2006-01-02 15:04:05"), stopDate.Format("2006-01-02 15:04:05"))
+	td.Data["notes"] = models.GetNotes(startDate.Format("2006-01-02 15:04:05"), stopDate.Format("2006-01-02 15:04:05"))
 
 	//  Summary per project and code
 	summary := make([]summaryData, 0)

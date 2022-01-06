@@ -31,6 +31,26 @@ func GetNoteForDay(happenAt time.Time) (*NoteModel, error) {
 	return &n, nil
 }
 
+// Get notes between two dates
+func GetNotes(fromDate string, toDate string) []NoteModel {
+	notes := []NoteModel{}
+
+	rows, err := db.Query(`SELECT id, happen_at, note FROM notes WHERE happen_at BETWEEN ? AND ? ORDER BY happen_at ASC`, fromDate, toDate)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		n := NoteModel{}
+		err = rows.Scan(&n.Id, &n.HappenAt, &n.Note)
+		if err != nil {
+			log.Fatal(err)
+		}
+		notes = append(notes, n)
+	}
+
+	return notes
+}
+
 // Insert note to database
 func InsertNoteModel(n *NoteModel) *NoteModel {
 	fmt.Println(n)

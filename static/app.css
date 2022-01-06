@@ -15,6 +15,11 @@ a:hover {
     color: #0f465c;
 }
 
+pre {
+    font-size: 1rem;
+    margin: 0;
+}
+
 
 /* Override default bootstrap buttons */
 .btn-primary,
@@ -130,6 +135,14 @@ table.table tfoot td:last-child { border-bottom-right-radius: 6px; }
 }
 .notes-form-control::placeholder {
     color: #c2b27d;
+}
+
+.notes-placeholder-control {
+    background-color: #f0e8cf;
+    border: 1px solid #bba766;
+    border-radius: 6px;
+    color: #77620f;
+    padding: 1rem;
 }
 
 .notes-form {
