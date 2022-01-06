@@ -18,7 +18,7 @@ func (app *application) GetReport(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("from") != "" {
 		td.Data["search_date_from"] = r.URL.Query().Get("from")
 	} else {
-		td.Data["search_date_from"] = time.Now().AddDate(0, 0, -6).Format("2006-01-02")
+		td.Data["search_date_from"] = time.Now().AddDate(0, -1, 0).Format("2006-01-02")
 	}
 	if r.URL.Query().Get("to") != "" {
 		td.Data["search_date_to"] = r.URL.Query().Get("to")
@@ -36,6 +36,7 @@ func (app *application) GetReport(w http.ResponseWriter, r *http.Request) {
 		project := strings.Replace(td.Data["search_project"].(string), "*", "%", -1)
 		code := strings.Replace(td.Data["search_code"].(string), "*", "%", -1)
 		td.Data["search_result"] = models.GetTimesSearch(from, to, project, code)
+		td.Data["notes"] = models.GetNotes(from, to)
 
 		//  Summary per project and code
 		summary := make([]summaryData, 0)

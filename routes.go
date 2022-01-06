@@ -56,6 +56,9 @@ func (app *application) SetupRoutes() {
 	app.Router.Post("/time/store", app.PostTimeStore)
 	app.Router.Post("/time/{timeId}/stop", app.PostTimeStop)
 
+	// Note
+	app.Router.Post("/note/upsert", app.PostNoteUpsert)
+
 	// Report
 	app.Router.Get("/report", app.GetReport)
 }

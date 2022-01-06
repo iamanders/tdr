@@ -116,7 +116,7 @@
                 <!-- <h2 class="fs-3 fw-bold">Search</h2> -->
 
             {{else if and (.Data.is_search) (not .Data.search_result) }}
-            <h2 class="fs-3 fw-bold">Found nothing ..</h2>
+            <h2 class="fs-3 fw-bold">Found no times</h2>
             {{else}}
                 <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.search_result}} times</h2>
 
@@ -159,6 +159,27 @@
             {{end}}
         </div>
     </div>
+
+    <!-- Notes -->
+    {{if .Data.is_search}}
+        <div class="bg-white">
+            <div class="container py-5">
+                {{if not .Data.is_search}}
+                    <!-- <h2 class="fs-3 fw-bold">Search</h2> -->
+                {{else if and (.Data.is_search) (not .Data.notes) }}
+                    <h2 class="fs-3 fw-bold">Found no notes</h2>
+                {{else}}
+                    <h2 class="fs-3 fw-bold mb-4">Found {{len .Data.notes}} notes</h2>
+
+                    {{range .Data.notes}}
+                        <h3 class="fw-bold fs-6 mb-3">{{.HappenAt.Time.Weekday}}, {{.HappenAt.Time.Format "02 Jan, 2006"}}</h3>
+                        <div class="notes-placeholder-control mb-4 fs-6"><pre>{{.Note}}</pre></div>
+                    {{end}}
+
+                {{end}}
+            </div>
+        </div>
+    {{end}}
 
     {{if .Data.search_result}}
         <script>
