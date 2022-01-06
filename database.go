@@ -26,7 +26,11 @@ func (app *application) setupDatabaseStructure() error {
 		return err
 	}
 
-	// TODO: Setup notes table
+	// Setup notes table
+	_, err = app.DB.Exec("CREATE TABLE IF NOT EXISTS `notes` (`id` integer, `happen_at` datetime, `note` text, PRIMARY KEY (id));")
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

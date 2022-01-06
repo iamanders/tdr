@@ -30,6 +30,26 @@ if (dayToggleAdvancedFormButton) {
     });
 }
 
+// Auto grow textarea on day page
+function textareaAutoHeight(element) {
+    element.style.height = "1rem";
+    element.style.height = (element.scrollHeight + 16)+"px";
+}
+function notesTextAreaFocus(element) {
+    let submit = document.querySelector('.notes-form button[type="submit"]');
+    submit.style.display = 'block';
+}
+function notesTextAreaBlur(element) {
+    let submit = document.querySelector('.notes-form button[type="submit"]');
+    submit.style.display = 'none';
+}
+document.addEventListener('DOMContentLoaded', function(event) {
+    let textarea = document.querySelector('textarea.auto-height');
+    if (textarea) {
+        textareaAutoHeight(textarea);
+    }
+});
+
 // Week page charts
 let chartProjectSummaryCanvas = document.querySelector('#chart-project-summary');
 if (chartProjectSummaryCanvas) {

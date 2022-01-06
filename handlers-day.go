@@ -33,6 +33,10 @@ func (app *application) GetDay(w http.ResponseWriter, r *http.Request) {
 	td.Data["day_link_next"] = "/day/" + currentDay.AddDate(0, 0, -1).Format("2006-01-02")
 	td.Data["day_link_previous"] = "/day/" + currentDay.AddDate(0, 0, 1).Format("2006-01-02")
 
+	// Get note data
+	note, _ := models.GetNoteForDay(currentDay)
+	td.Data["note"] = note.Note
+
 	if err := app.renderTemplates(w, r, &td, "day", "layout.app", "partials/time-table-row"); err != nil {
 		app.render500(w, r, err.Error())
 		return
