@@ -112,6 +112,7 @@
                             <th>Time</th>
                             <th>Length</th>
                             <th class="no-sort">Comment</th>
+                            <th class="no-sort"></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -124,6 +125,7 @@
                                 {{formatDuration $td}}
                             </td>
                             <td></td>
+                            <td></td>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -131,11 +133,13 @@
                         {{range .Data.times}}
                             {{if ne $day (.StartsAt.Time.Format "2006-01-02")}}
                                 <tr class="sub-heading">
-                                    <td colspan="5"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
+                                    <td colspan="56"><strong>{{.StartsAt.Time.Weekday}}, {{.StartsAt.Time.Format "02 Jan, 2006"}}</strong></td>
                                 </tr>
                                 {{$day = .StartsAt.Time.Format "2006-01-02"}}
                             {{end}}
-                            {{template "_time-table-row" .}}
+
+                            {{$vars := makeVars "" true . .TimeDuration }}
+                            {{template "_time-table-row" $vars}}
                         {{end}}
                     </tbody>
                 </table>

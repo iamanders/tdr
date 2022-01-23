@@ -161,6 +161,7 @@
                         <th>Time</th>
                         <th>Length</th>
                         <th class="no-sort">Comment</th>
+                        <th class="no-sort"></th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -180,11 +181,13 @@
                             {{formatDuration $td}}
                         </td>
                         <td></td>
+                        <td></td>
                     </tr>
                 </tfoot>
                 <tbody>
                     {{range .Data.times}}
-                        {{template "_time-table-row" .}}
+                        {{$vars := makeVars $.Csrf $.Data.current . .TimeDuration }}
+                        {{template "_time-table-row" $vars}}
                     {{end}}
                 </tbody>
             </table>

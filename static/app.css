@@ -122,6 +122,11 @@ table.table thead th:last-child { border-top-right-radius: 6px; }
 table.table tfoot td:first-child { border-bottom-left-radius: 6px; }
 table.table tfoot td:last-child { border-bottom-right-radius: 6px; }
 
+table.table tbody tr td.small {
+    width: 30px;
+    white-space: nowrap;
+    text-align: right;
+}
 
 /* Notes form classes */
 .notes-form-control {
@@ -174,4 +179,22 @@ table.table tfoot td:last-child { border-bottom-right-radius: 6px; }
 .day-toggle-insert-current-time {
     text-decoration: none;
     font-size: .8rem;
+}
+
+table.table .action form {
+    display: inline-block;
+}
+table.table .action button[type="submit"],
+table.table .action a {
+    color: #306a81;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    transition: color .25s;
+}
+table.table .action button[type="submit"]:hover,
+table.table .action a:hover {
+    color: #0f465c;
 }

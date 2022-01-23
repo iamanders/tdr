@@ -1,24 +1,51 @@
 {{define "_time-table-row"}}
 
-    {{if not .StopsAt.Valid}}<tr class="running">{{else}}<tr class="flags-{{.Flags}}">{{end}}
+    {{$csrf := index . 0}}
+    {{$current := index . 1}}
+    {{$time := index . 2}}
+    {{$td := index . 3}}
+
+    {{if not $time.StopsAt.Valid}}<tr class="running">{{else}}<tr class="flags-{{$time.Flags}}">{{end}}
         <td>
-            <a href="/time/{{.Id}}/edit">{{.Project}}</a>
+            <a href="/time/{{$time.Id}}/edit">{{$time.Project}}</a>
         </td>
-        <td>{{.Code}}</td>
+        <td>{{$time.Code}}</td>
         <td class="text-nowrap">
-            {{.StartsAt.Time.Format "15:04"}} -
-            {{if .StopsAt.Valid}}
-                {{.StopsAt.Time.Format "15:04"}}
+            {{$time.StartsAt.Time.Format "15:04"}} -
+            {{if $time.StopsAt.Valid}}
+                {{$time.StopsAt.Time.Format "15:04"}}
             {{end}}
         </td>
-        <td data-sort="{{.TimeDuration.Seconds}}">
-            {{if .StopsAt.Valid}}
-                {{formatDuration .TimeDuration}}
+        <td data-sort="{{$td.Seconds}}">
+            {{if $time.StopsAt.Valid}}
+                {{formatDuration $td}}
             {{else}}
-                ({{formatDuration .TimeDuration}})
+                ({{formatDuration $td}})
             {{end}}
         </td>
-        <td>{{.Comment}}</td>
+        <td>{{$time.Comment}}</td>
+        <td class="small action">
+            <a href="/time/{{$time.Id}}/edit" title="Edit time">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+                </svg>
+            </a>
+
+            {{if not $current}}
+                <form action="/time/store" method="POST">
+                    {{ $csrf }}
+                    <input type="hidden" name="project" class="form-control" value="{{$time.Project}}">
+                    <input type="hidden" name="code" class="form-control" value="{{$time.Code}}">
+                    <input type="hidden" name="comment" class="form-control" value="{{$time.Comment}}">
+                    <input type="hidden" name="no_gap" class="form-control" value="1">
+                    <button type="submit" title="Restart time">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
+                        </svg>
+                    </button>
+                </form>
+            {{end}}
+        </td>
     </tr>
 
 {{end}}

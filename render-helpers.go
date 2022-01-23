@@ -13,6 +13,7 @@ var templateFunctions = template.FuncMap{
 	"timeDurationMultiple": models.TimeDurationMultiple,
 	"formatDuration":       formatDuration,
 	"add":                  add,
+	"makeVars":             makeVars,
 }
 
 // Format time duration with format hh:mm
@@ -25,4 +26,8 @@ func formatDuration(td time.Duration) string {
 // Addition function for templates
 func add(a int, b int) int {
 	return a + b
+}
+
+func makeVars(args ...interface{}) []interface{} {
+	return args
 }
